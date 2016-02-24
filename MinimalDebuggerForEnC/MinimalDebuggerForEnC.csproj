@@ -43,69 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cor\CorDebugger.cs" />
-    <Compile Include="Managed\DebugEngine.cs" />
-    <Compile Include="Managed\DebugProcess.cs" />
-    <Compile Include="Managed\ProcessCollection.cs" />
-    <Compile Include="NativeInterfaces\CorDebugChainReason.cs" />
-    <Compile Include="NativeInterfaces\CorDebugCreateProcessFlags.cs" />
-    <Compile Include="NativeInterfaces\CorDebugIntercept.cs" />
-    <Compile Include="NativeInterfaces\CorDebugStepReason.cs" />
-    <Compile Include="NativeInterfaces\CorDebugThreadState.cs" />
-    <Compile Include="NativeInterfaces\CorDebugUnmappedStop.cs" />
-    <Compile Include="NativeInterfaces\CorDebugUserState.cs" />
-    <Compile Include="NativeInterfaces\CorElementType.cs" />
-    <Compile Include="NativeInterfaces\COR_DEBUG_IL_TO_NATIVE_MAP.cs" />
-    <Compile Include="NativeInterfaces\COR_DEBUG_STEP_RANGE.cs" />
-    <Compile Include="NativeInterfaces\COR_IL_MAP.cs" />
-    <Compile Include="NativeInterfaces\ICorDebug.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugAppDomain.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugAppDomainEnum.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugAssembly.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugAssemblyEnum.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugBreakpoint.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugBreakpointEnum.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugChain.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugChainEnum.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugClass.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugCode.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugContext.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugController.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugEditAndContinueSnapshot.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugEnum.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugErrorInfoEnum.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugEval.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugFrame.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugFrameEnum.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugFunction.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugFunctionBreakpoint.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugModule.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugModuleBreakpoint.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugModuleEnum.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugObjectEnum.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugObjectValue.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugProcess.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugProcessEnum.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugRegisterSet.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugStepper.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugStepperEnum.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugThread.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugThreadEnum.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugUnmanagedCallback.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugValue.cs" />
-    <Compile Include="NativeInterfaces\ICorDebugValueBreakpoint.cs" />
-    <Compile Include="NativeInterfaces\IMetadataImport.cs" />
-    <Compile Include="NativeInterfaces\PROCESS_INFORMATION.cs" />
-    <Compile Include="NativeInterfaces\SECURITY_ATTRIBUTES.cs" />
-    <Compile Include="NativeInterfaces\STARTUPINFO.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SafeWin32Handle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Cor\" />
+    <Folder Include="Managed\" />
+    <Folder Include="NativeInterfaces\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
