@@ -43,12 +43,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cor\CorDebugger.cs" />
+    <Compile Include="Cor\CorAppDomain.cs" />
+    <Compile Include="Cor\CorAssembly.cs" />
+    <Compile Include="Cor\CorChain.cs" />
+    <Compile Include="Cor\CorClass.cs" />
+    <Compile Include="Cor\CorContext.cs" />
+    <Compile Include="Cor\CorController.cs" />
+    <Compile Include="Cor\CorCorDebugRegister.cs" />
+    <Compile Include="Cor\CorElementType.cs" />
+    <Compile Include="Cor\CorFrame.cs" />
+    <Compile Include="Cor\CorModule.cs" />
     <Compile Include="Cor\CorProcess.cs" />
+    <Compile Include="Cor\CorRegisterSet.cs" />
+    <Compile Include="Cor\CorStepper.cs" />
+    <Compile Include="Cor\CorThread.cs" />
+    <Compile Include="Cor\CorType.cs" />
+    <Compile Include="Cor\CorValue.cs" />
     <Compile Include="Cor\WrapperBase.cs" />
-    <Compile Include="NativeApi\ICLRHostingWrappers.cs" />
-    <Compile Include="NativeApi\ICorDebugWrappers.cs" />
-    <Compile Include="NativeApi\NativeImports.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -57,6 +68,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Managed\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NativeDebugWrappers\NativeDebugWrappers.csproj">
+      <Project>{3991ab6c-468b-4c28-95fc-3188cfb34180}</Project>
+      <Name>NativeDebugWrappers</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
