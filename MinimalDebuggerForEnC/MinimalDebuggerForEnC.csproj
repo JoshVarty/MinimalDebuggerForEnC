@@ -60,6 +60,8 @@
     <Compile Include="Cor\CorType.cs" />
     <Compile Include="Cor\CorValue.cs" />
     <Compile Include="Cor\WrapperBase.cs" />
+    <Compile Include="NativeApi\ICorDebugWrappers.cs" />
+    <Compile Include="NativeApi\SECURITY_ATTRIBUTES.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
