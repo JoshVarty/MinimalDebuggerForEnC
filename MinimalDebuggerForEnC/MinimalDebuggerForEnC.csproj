@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cor\CorDebugger.cs" />
+    <Compile Include="Cor\CorProcess.cs" />
+    <Compile Include="Cor\WrapperBase.cs" />
     <Compile Include="NativeApi\ICLRHostingWrappers.cs" />
     <Compile Include="NativeApi\ICorDebugWrappers.cs" />
     <Compile Include="NativeApi\NativeImports.cs" />
@@ -53,7 +56,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Cor\" />
     <Folder Include="Managed\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

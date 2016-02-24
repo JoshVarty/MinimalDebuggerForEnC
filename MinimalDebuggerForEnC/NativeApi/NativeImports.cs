@@ -34,6 +34,9 @@ namespace MinimalDebuggerForEnC.NativeApi
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 8), ComVisible(false)]
     public class STARTUPINFO
     {
+        /// <summary>
+        /// The size of the structure, in bytes
+        /// </summary>
         public int cb;
         public string lpReserved;
         public string lpDesktop;
