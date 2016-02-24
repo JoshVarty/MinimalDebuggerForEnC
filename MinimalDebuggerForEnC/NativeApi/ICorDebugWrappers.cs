@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace MinimalDebuggerForEnC.NativeApi
 {
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    internal struct COR_IL_MAP
+    public struct COR_IL_MAP
     {
         public uint oldOffset;
         public uint newOffset;
@@ -19,7 +19,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    internal struct COR_VERSION
+    public struct COR_VERSION
     {
         public uint dwMajor;
         public uint dwMinor;
@@ -28,32 +28,32 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    internal struct FILETIME
+    public struct FILETIME
     {
         public uint dwLowDateTime;
         public uint dwHighDateTime;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct LARGE_INTEGER
+    public struct LARGE_INTEGER
     {
         public long QuadPart;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct ULARGE_INTEGER
+    public struct ULARGE_INTEGER
     {
         public ulong QuadPart;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    internal struct COR_DEBUG_STEP_RANGE
+    public struct COR_DEBUG_STEP_RANGE
     {
         public uint startOffset;
         public uint endOffset;
     }
 
-    internal enum CorDebugChainReason
+    public enum CorDebugChainReason
     {
         CHAIN_CLASS_INIT = 1,
         CHAIN_CONTEXT_POLICY = 8,
@@ -70,13 +70,13 @@ namespace MinimalDebuggerForEnC.NativeApi
         CHAIN_THREAD_START = 0x40
     }
 
-    internal enum CorDebugCreateProcessFlags
+    public enum CorDebugCreateProcessFlags
     {
         DEBUG_NO_SPECIAL_OPTIONS
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    internal enum CorDebugExceptionCallbackType
+    public enum CorDebugExceptionCallbackType
     {
         DEBUG_EXCEPTION_CATCH_HANDLER_FOUND = 3,
         DEBUG_EXCEPTION_FIRST_CHANCE = 1,
@@ -85,20 +85,20 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    internal enum CorDebugExceptionUnwindCallbackType
+    public enum CorDebugExceptionUnwindCallbackType
     {
         DEBUG_EXCEPTION_INTERCEPTED = 2,
         DEBUG_EXCEPTION_UNWIND_BEGIN = 1
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    internal enum CorDebugHandleType
+    public enum CorDebugHandleType
     {
         HANDLE_STRONG = 1,
         HANDLE_WEAK_TRACK_RESURRECTION = 2
     }
 
-    internal enum CorDebugIntercept
+    public enum CorDebugIntercept
     {
         INTERCEPT_ALL = 0xffff,
         INTERCEPT_CLASS_INIT = 1,
@@ -109,7 +109,7 @@ namespace MinimalDebuggerForEnC.NativeApi
         INTERCEPT_SECURITY = 4
     }
 
-    internal enum CorDebugInternalFrameType
+    public enum CorDebugInternalFrameType
     {
         STUBFRAME_NONE,
         STUBFRAME_M2U,
@@ -125,7 +125,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    internal enum CorDebugMappingResult
+    public enum CorDebugMappingResult
     {
         MAPPING_APPROXIMATE = 0x20,
         MAPPING_EPILOG = 2,
@@ -136,12 +136,12 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    internal enum CorDebugMDAFlags
+    public enum CorDebugMDAFlags
     {
         MDA_FLAG_SLIP = 2
     }
 
-    internal enum CorDebugRegister
+    public enum CorDebugRegister
     {
         REGISTER_AMD64_R10 = 11,
         REGISTER_AMD64_R11 = 12,
@@ -202,13 +202,13 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    internal enum CorDebugSetContextFlag
+    public enum CorDebugSetContextFlag
     {
         SET_CONTEXT_FLAG_ACTIVE_FRAME = 1,
         SET_CONTEXT_FLAG_UNWIND_FRAME = 2
     }
 
-    internal enum CorDebugStepReason
+    public enum CorDebugStepReason
     {
         STEP_NORMAL,
         STEP_RETURN,
@@ -219,13 +219,13 @@ namespace MinimalDebuggerForEnC.NativeApi
         STEP_EXIT
     }
 
-    internal enum CorDebugThreadState
+    public enum CorDebugThreadState
     {
         THREAD_RUN,
         THREAD_SUSPEND
     }
 
-    internal enum CorDebugUnmappedStop
+    public enum CorDebugUnmappedStop
     {
         STOP_ALL = 0xffff,
         STOP_EPILOG = 2,
@@ -237,7 +237,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    internal enum CorDebugUserState
+    public enum CorDebugUserState
     {
         USER_BACKGROUND = 4,
         USER_STOP_REQUESTED = 1,
@@ -250,7 +250,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("3D6F5F61-7538-11D3-8D5B-00104B35E7EF"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebug
+    public interface ICorDebug
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void Initialize();
@@ -273,7 +273,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("3D6F5F63-7538-11D3-8D5B-00104B35E7EF")]
-    internal interface ICorDebugAppDomain : ICorDebugController
+    public interface ICorDebugAppDomain : ICorDebugController
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Stop([In] uint dwTimeoutIgnored);
@@ -318,7 +318,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("096E81D5-ECDA-4202-83F5-C65980A9EF75")]
-    internal interface ICorDebugAppDomain2
+    public interface ICorDebugAppDomain2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetArrayOrPointerType([In] uint elementType, [In] uint nRank, [In, MarshalAs(UnmanagedType.Interface)] ICorDebugType pTypeArg, [MarshalAs(UnmanagedType.Interface)] out ICorDebugType ppType);
@@ -327,7 +327,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("63CA1B24-4359-4883-BD57-13F815F58744"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugAppDomainEnum : ICorDebugEnum
+    public interface ICorDebugAppDomainEnum : ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Skip([In] uint celt);
@@ -342,7 +342,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("0405B0DF-A660-11D2-BD02-0000F80849BD")]
-    internal interface ICorDebugArrayValue : ICorDebugHeapValue
+    public interface ICorDebugArrayValue : ICorDebugHeapValue
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void GetType(out uint pType);
@@ -375,7 +375,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("DF59507C-D47A-459E-BCE2-6427EAC8FD06"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugAssembly
+    public interface ICorDebugAssembly
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetProcess([MarshalAs(UnmanagedType.Interface)] out ICorDebugProcess ppProcess);
@@ -390,14 +390,14 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("426D1F9E-6DD4-44C8-AEC7-26CDBAF4E398"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugAssembly2
+    public interface ICorDebugAssembly2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void IsFullyTrusted(out int pbFullyTrusted);
     }
 
     [ComImport, Guid("4A2A1EC9-85EC-4BFB-9F15-A89FDFE0FE83"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugAssemblyEnum : ICorDebugEnum
+    public interface ICorDebugAssemblyEnum : ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Skip([In] uint celt);
@@ -412,7 +412,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCAFC-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugBoxValue : ICorDebugHeapValue
+    public interface ICorDebugBoxValue : ICorDebugHeapValue
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void GetType(out uint pType);
@@ -431,7 +431,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("CC7BCAE8-8A68-11D2-983C-0000F808342D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugBreakpoint
+    public interface ICorDebugBreakpoint
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void Activate([In] int bActive);
@@ -440,7 +440,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCB03-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugBreakpointEnum : ICorDebugEnum
+    public interface ICorDebugBreakpointEnum : ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Skip([In] uint celt);
@@ -455,7 +455,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("CC7BCAEE-8A68-11D2-983C-0000F808342D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugChain
+    public interface ICorDebugChain
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetThread([MarshalAs(UnmanagedType.Interface)] out ICorDebugThread ppThread);
@@ -484,7 +484,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("CC7BCB08-8A68-11D2-983C-0000F808342D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugChainEnum : ICorDebugEnum
+    public interface ICorDebugChainEnum : ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Skip([In] uint celt);
@@ -499,7 +499,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCAF5-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugClass
+    public interface ICorDebugClass
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetModule([MarshalAs(UnmanagedType.Interface)] out ICorDebugModule pModule);
@@ -510,7 +510,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("B008EA8D-7AB1-43F7-BB20-FBB5A04038AE"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugClass2
+    public interface ICorDebugClass2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetParameterizedType([In] uint elementType, [In] uint nTypeArgs, [In, MarshalAs(UnmanagedType.Interface)] ref ICorDebugType ppTypeArgs, [MarshalAs(UnmanagedType.Interface)] out ICorDebugType ppType);
@@ -519,7 +519,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCAF4-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugCode
+    public interface ICorDebugCode
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void IsIL(out int pbIL);
@@ -542,7 +542,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("55E96461-9645-45E4-A2FF-0367877ABCDE")]
-    internal interface ICorDebugCodeEnum : ICorDebugEnum
+    public interface ICorDebugCodeEnum : ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Skip([In] uint celt);
@@ -557,7 +557,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCB00-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugContext : ICorDebugObjectValue
+    public interface ICorDebugContext : ICorDebugObjectValue
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void GetType(out uint pType);
@@ -584,7 +584,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("3D6F5F62-7538-11D3-8D5B-00104B35E7EF")]
-    internal interface ICorDebugController
+    public interface ICorDebugController
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void Stop([In] uint dwTimeoutIgnored);
@@ -609,7 +609,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("6DC3FA01-D7CB-11D2-8A95-0080C792E5D8")]
-    internal interface ICorDebugEditAndContinueSnapshot
+    public interface ICorDebugEditAndContinueSnapshot
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void CopyMetaData([In, MarshalAs(UnmanagedType.Interface)] IStream pIStream, out Guid pMvid);
@@ -628,7 +628,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("CC7BCB01-8A68-11D2-983C-0000F808342D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugEnum
+    public interface ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void Skip([In] uint celt);
@@ -641,7 +641,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("F0E18809-72B5-11D2-976F-00A0C9B4D50C"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugErrorInfoEnum : ICorDebugEnum
+    public interface ICorDebugErrorInfoEnum : ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Skip([In] uint celt);
@@ -656,7 +656,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCAF6-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugEval
+    public interface ICorDebugEval
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void CallFunction([In, MarshalAs(UnmanagedType.Interface)] ICorDebugFunction pFunction, [In] uint nArgs, [In, MarshalAs(UnmanagedType.Interface)] ref ICorDebugValue ppArgs);
@@ -681,7 +681,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("FB0D9CE7-BE66-4683-9D32-A42A04E2FD91")]
-    internal interface ICorDebugEval2
+    public interface ICorDebugEval2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void CallParameterizedFunction([In, MarshalAs(UnmanagedType.Interface)] ICorDebugFunction pFunction, [In] uint nTypeArgs, [In, MarshalAs(UnmanagedType.Interface)] ref ICorDebugType ppTypeArgs, [In] uint nArgs, [In, MarshalAs(UnmanagedType.Interface)] ref ICorDebugValue ppArgs);
@@ -700,7 +700,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("CC7BCAEF-8A68-11D2-983C-0000F808342D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugFrame
+    public interface ICorDebugFrame
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetChain([MarshalAs(UnmanagedType.Interface)] out ICorDebugChain ppChain);
@@ -721,7 +721,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCB07-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugFrameEnum : ICorDebugEnum
+    public interface ICorDebugFrameEnum : ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Skip([In] uint celt);
@@ -736,7 +736,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("CC7BCAF3-8A68-11D2-983C-0000F808342D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugFunction
+    public interface ICorDebugFunction
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetModule([MarshalAs(UnmanagedType.Interface)] out ICorDebugModule ppModule);
@@ -757,7 +757,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("EF0C490B-94C3-4E4D-B629-DDC134C532D8"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugFunction2
+    public interface ICorDebugFunction2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void SetJMCStatus([In] int bIsJustMyCode);
@@ -770,7 +770,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCAE9-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugFunctionBreakpoint : ICorDebugBreakpoint
+    public interface ICorDebugFunctionBreakpoint : ICorDebugBreakpoint
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Activate([In] int bActive);
@@ -783,7 +783,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("CC7BCAF8-8A68-11D2-983C-0000F808342D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugGenericValue : ICorDebugValue
+    public interface ICorDebugGenericValue : ICorDebugValue
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void GetType(out uint pType);
@@ -800,7 +800,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("029596E8-276B-46A1-9821-732E96BBB00B"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugHandleValue : ICorDebugReferenceValue
+    public interface ICorDebugHandleValue : ICorDebugReferenceValue
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void GetType(out uint pType);
@@ -827,7 +827,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCAFA-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugHeapValue : ICorDebugValue
+    public interface ICorDebugHeapValue : ICorDebugValue
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void GetType(out uint pType);
@@ -844,14 +844,14 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("E3AC4D6C-9CB7-43E6-96CC-B21540E5083C"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugHeapValue2
+    public interface ICorDebugHeapValue2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void CreateHandle([In] CorDebugHandleType type, [MarshalAs(UnmanagedType.Interface)] out ICorDebugHandleValue ppHandle);
     }
 
     [ComImport, Guid("03E26311-4F76-11D3-88C6-006097945418"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugILFrame : ICorDebugFrame
+    public interface ICorDebugILFrame : ICorDebugFrame
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void GetChain([MarshalAs(UnmanagedType.Interface)] out ICorDebugChain ppChain);
@@ -890,7 +890,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("5D88A994-6C30-479B-890F-BCEF88B129A5")]
-    internal interface ICorDebugILFrame2
+    public interface ICorDebugILFrame2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void RemapFunction([In] uint newILOffset);
@@ -899,7 +899,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("B92CC7F7-9D2D-45C4-BC2B-621FCC9DFBF4"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugInternalFrame : ICorDebugFrame
+    public interface ICorDebugInternalFrame : ICorDebugFrame
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void GetChain([MarshalAs(UnmanagedType.Interface)] out ICorDebugChain ppChain);
@@ -922,7 +922,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("C0815BDC-CFAB-447E-A779-C116B454EB5B")]
-    internal interface ICorDebugInternalFrame2
+    public interface ICorDebugInternalFrame2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetAddress(out ulong pAddress);
@@ -931,7 +931,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("3D6F5F60-7538-11D3-8D5B-00104B35E7EF"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugManagedCallback
+    public interface ICorDebugManagedCallback
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void Breakpoint([In, MarshalAs(UnmanagedType.Interface)] ICorDebugAppDomain pAppDomain, [In, MarshalAs(UnmanagedType.Interface)] ICorDebugThread pThread, [In, MarshalAs(UnmanagedType.Interface)] ICorDebugBreakpoint pBreakpoint);
@@ -988,7 +988,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("250E5EEA-DB5C-4C76-B6F3-8C46F12E3203"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugManagedCallback2
+    public interface ICorDebugManagedCallback2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void FunctionRemapOpportunity([In, MarshalAs(UnmanagedType.Interface)] ICorDebugAppDomain pAppDomain, [In, MarshalAs(UnmanagedType.Interface)] ICorDebugThread pThread, [In, MarshalAs(UnmanagedType.Interface)] ICorDebugFunction pOldFunction, [In, MarshalAs(UnmanagedType.Interface)] ICorDebugFunction pNewFunction, [In] uint oldILOffset);
@@ -1009,7 +1009,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("CC726F2F-1DB7-459B-B0EC-05F01D841B42"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugMDA
+    public interface ICorDebugMDA
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetName([In] uint cchName, out uint pcchName, [Out, MarshalAs(UnmanagedType.Interface)] ICorDebugMDA szName);
@@ -1024,7 +1024,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("DBA2D8C1-E5C5-4069-8C13-10A7C6ABF43D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugModule
+    public interface ICorDebugModule
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetProcess([MarshalAs(UnmanagedType.Interface)] out ICorDebugProcess ppProcess);
@@ -1063,7 +1063,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("7FCC5FB5-49C0-41DE-9938-3B88B5B9ADD7"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugModule2
+    public interface ICorDebugModule2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void SetJMCStatus([In] int bIsJustMyCode, [In] uint cTokens, [In] ref uint pTokens);
@@ -1078,14 +1078,14 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("86F012BF-FF15-4372-BD30-B6F11CAAE1DD")]
-    internal interface ICorDebugModule3
+    public interface ICorDebugModule3
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void CreateReaderForInMemorySymbols([In] ref Guid riid, out IntPtr ppObj);
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCAEA-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugModuleBreakpoint : ICorDebugBreakpoint
+    public interface ICorDebugModuleBreakpoint : ICorDebugBreakpoint
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Activate([In] int bActive);
@@ -1096,7 +1096,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("CC7BCB09-8A68-11D2-983C-0000F808342D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugModuleEnum : ICorDebugEnum
+    public interface ICorDebugModuleEnum : ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Skip([In] uint celt);
@@ -1111,7 +1111,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("03E26314-4F76-11D3-88C6-006097945418"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugNativeFrame : ICorDebugFrame
+    public interface ICorDebugNativeFrame : ICorDebugFrame
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void GetChain([MarshalAs(UnmanagedType.Interface)] out ICorDebugChain ppChain);
@@ -1150,7 +1150,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("35389FF1-3684-4C55-A2EE-210F26C60E5E"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugNativeFrame2
+    public interface ICorDebugNativeFrame2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void IsChild(out int pIsChild);
@@ -1161,7 +1161,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCB02-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugObjectEnum : ICorDebugEnum
+    public interface ICorDebugObjectEnum : ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Skip([In] uint celt);
@@ -1176,7 +1176,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("18AD3D6E-B7D2-11D2-BD04-0000F80849BD")]
-    internal interface ICorDebugObjectValue : ICorDebugValue
+    public interface ICorDebugObjectValue : ICorDebugValue
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void GetType(out uint pType);
@@ -1203,14 +1203,14 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("49E4A320-4A9B-4ECA-B105-229FB7D5009F")]
-    internal interface ICorDebugObjectValue2
+    public interface ICorDebugObjectValue2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetVirtualMethodAndType([In] uint memberRef, [MarshalAs(UnmanagedType.Interface)] out ICorDebugFunction ppFunction, [MarshalAs(UnmanagedType.Interface)] out ICorDebugType ppType);
     }
 
     [ComImport, Guid("3D6F5F64-7538-11D3-8D5B-00104B35E7EF"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugProcess : ICorDebugController
+    public interface ICorDebugProcess : ICorDebugController
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Stop([In] uint dwTimeoutIgnored);
@@ -1269,7 +1269,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("AD1B3588-0EF0-4744-A496-AA09A9F80371")]
-    internal interface ICorDebugProcess2
+    public interface ICorDebugProcess2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetThreadForTaskID([In] ulong taskid, [MarshalAs(UnmanagedType.Interface)] out ICorDebugThread2 ppThread);
@@ -1288,7 +1288,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("CC7BCB05-8A68-11D2-983C-0000F808342D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugProcessEnum : ICorDebugEnum
+    public interface ICorDebugProcessEnum : ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Skip([In] uint celt);
@@ -1303,7 +1303,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("CC7BCAF9-8A68-11D2-983C-0000F808342D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugReferenceValue : ICorDebugValue
+    public interface ICorDebugReferenceValue : ICorDebugValue
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void GetType(out uint pType);
@@ -1326,7 +1326,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCB0B-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugRegisterSet
+    public interface ICorDebugRegisterSet
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetRegistersAvailable(out ulong pAvailable);
@@ -1341,7 +1341,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("879CAC0A-4A53-4668-B8E3-CB8473CB187F"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugRuntimeUnwindableFrame : ICorDebugFrame
+    public interface ICorDebugRuntimeUnwindableFrame : ICorDebugFrame
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void GetChain([MarshalAs(UnmanagedType.Interface)] out ICorDebugChain ppChain);
@@ -1362,7 +1362,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("A0647DE9-55DE-4816-929C-385271C64CF7")]
-    internal interface ICorDebugStackWalk
+    public interface ICorDebugStackWalk
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetContext([In] uint contextFlags, [In] uint contextBufSize, out uint contextSize, out byte contextBuf);
@@ -1375,7 +1375,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("CC7BCAEC-8A68-11D2-983C-0000F808342D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugStepper
+    public interface ICorDebugStepper
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void IsActive(out int pbActive);
@@ -1396,14 +1396,14 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("C5B6E9C3-E7D1-4A8E-873B-7F047F0706F7"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugStepper2
+    public interface ICorDebugStepper2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void SetJMC([In] int fIsJMCStepper);
     }
 
     [ComImport, Guid("CC7BCB04-8A68-11D2-983C-0000F808342D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugStepperEnum : ICorDebugEnum
+    public interface ICorDebugStepperEnum : ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Skip([In] uint celt);
@@ -1418,7 +1418,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCAFD-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugStringValue : ICorDebugHeapValue
+    public interface ICorDebugStringValue : ICorDebugHeapValue
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void GetType(out uint pType);
@@ -1439,7 +1439,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("938C6D66-7FB6-4F69-B389-425B8987329B")]
-    internal interface ICorDebugThread
+    public interface ICorDebugThread
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetProcess([MarshalAs(UnmanagedType.Interface)] out ICorDebugProcess ppProcess);
@@ -1476,7 +1476,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("2BD956D9-7B07-4BEF-8A98-12AA862417C5"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugThread2
+    public interface ICorDebugThread2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetActiveFunctions([In] uint cFunctions, out uint pcFunctions, [In, Out, MarshalAs(UnmanagedType.Interface)] ICorDebugThread2 pFunctions);
@@ -1491,7 +1491,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("F8544EC3-5E4E-46C7-8D3E-A52B8405B1F5")]
-    internal interface ICorDebugThread3
+    public interface ICorDebugThread3
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void CreateStackWalk([MarshalAs(UnmanagedType.Interface)] out ICorDebugStackWalk ppStackWalk);
@@ -1500,7 +1500,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCB06-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugThreadEnum : ICorDebugEnum
+    public interface ICorDebugThreadEnum : ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Skip([In] uint celt);
@@ -1515,7 +1515,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("D613F0BB-ACE1-4C19-BD72-E4C08D5DA7F5"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugType
+    public interface ICorDebugType
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetType(out uint ty);
@@ -1534,7 +1534,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("10F27499-9DF2-43CE-8333-A321D7C99CB4")]
-    internal interface ICorDebugTypeEnum : ICorDebugEnum
+    public interface ICorDebugTypeEnum : ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Skip([In] uint celt);
@@ -1549,14 +1549,14 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("5263E909-8CB5-11D3-BD2F-0000F80849BD"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugUnmanagedCallback
+    public interface ICorDebugUnmanagedCallback
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void DebugEvent([In, ComAliasName("CORDBLib.ULONG_PTR")] ulong pDebugEvent, [In] int fOutOfBand);
     }
 
     [ComImport, Guid("CC7BCAF7-8A68-11D2-983C-0000F808342D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugValue
+    public interface ICorDebugValue
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetType(out uint pType);
@@ -1569,14 +1569,14 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("5E0B54E7-D88A-4626-9420-A691E0A78B49")]
-    internal interface ICorDebugValue2
+    public interface ICorDebugValue2
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetExactType([MarshalAs(UnmanagedType.Interface)] out ICorDebugType ppType);
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CC7BCAEB-8A68-11D2-983C-0000F808342D")]
-    internal interface ICorDebugValueBreakpoint : ICorDebugBreakpoint
+    public interface ICorDebugValueBreakpoint : ICorDebugBreakpoint
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Activate([In] int bActive);
@@ -1587,7 +1587,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, Guid("CC7BCB0A-8A68-11D2-983C-0000F808342D"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface ICorDebugValueEnum : ICorDebugEnum
+    public interface ICorDebugValueEnum : ICorDebugEnum
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         new void Skip([In] uint celt);
@@ -1602,7 +1602,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("0C733A30-2A1C-11CE-ADE5-00AA0044773D")]
-    internal interface ISequentialStream
+    public interface ISequentialStream
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void RemoteRead(out byte pv, [In] uint cb, out uint pcbRead);
@@ -1611,7 +1611,7 @@ namespace MinimalDebuggerForEnC.NativeApi
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct tagSTATSTG
+    public struct tagSTATSTG
     {
         [MarshalAs(UnmanagedType.LPWStr)]
         public string pwcsName;
