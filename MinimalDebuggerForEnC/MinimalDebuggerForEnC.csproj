@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NativeApi\ICLRHostingWrappers.cs" />
+    <Compile Include="NativeApi\ICorDebugWrappers.cs" />
+    <Compile Include="NativeApi\NativeImports.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -52,7 +55,6 @@
   <ItemGroup>
     <Folder Include="Cor\" />
     <Folder Include="Managed\" />
-    <Folder Include="NativeInterfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
