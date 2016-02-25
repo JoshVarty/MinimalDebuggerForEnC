@@ -63,6 +63,10 @@
       <Project>{c18d303b-2c55-43eb-a3df-39cf3fb1d447}</Project>
       <Name>raw</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SampleProcess\SampleProcess.csproj">
+      <Project>{b78b361c-70ff-4fba-a397-bda1fdcc91d9}</Project>
+      <Name>SampleProcess</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

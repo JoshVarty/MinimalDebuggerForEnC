@@ -317,7 +317,6 @@ namespace Microsoft.Samples.Debugging.CorDebug
                                                  out proc);
 
             }
-
             return CorProcess.GetCorProcess(proc);
         }
 

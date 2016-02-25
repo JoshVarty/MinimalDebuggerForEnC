@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Samples.Debugging.CorDebug;
 using Microsoft.Samples.Debugging.CorDebug.NativeApi;
+using System.IO;
+using System.Collections;
 
 namespace MinimalDebuggerForEnC
 {
@@ -15,9 +17,6 @@ namespace MinimalDebuggerForEnC
     {
         static void Main(string[] args)
         {
-            int processId = 7700;
-            //Console.ReadLine();
-
             //Metahost class and Interface GUID
             Guid classId = new Guid("9280188D-0E8E-4867-B30C-7FA83884E8DE");
             Guid interfaceId = new Guid("D332DB9E-B9B3-4125-8207-A14884F53216");
@@ -28,12 +27,12 @@ namespace MinimalDebuggerForEnC
             ICLRMetaHost metaHost = (ICLRMetaHost)rawMetaHost;
 
             //var runtimes = metaHost.EnumerateLoadedRuntimes(process.Handle);
-            AttachToProcess(processId);
+            AttachToProcess();
 
             Console.ReadLine();
         }
 
-        private static void AttachToProcess(int processId)
+        private static void AttachToProcess()
         {
             //var process = Process.GetProcessById(processId);
 
@@ -45,12 +44,27 @@ namespace MinimalDebuggerForEnC
 
             ICLRMetaHost metaHost = (ICLRMetaHost)rawMetaHost;
 
-            var runtime_v40 = GetLoadedRuntimeByVersion(metaHost, processId, "v4.0");
+            var currentProcess = Process.GetCurrentProcess();
+            var runtime_v40 = GetLoadedRuntimeByVersion(metaHost, currentProcess.Id, "v4.0");
             var debugger = CreateDebugger(runtime_v40.m_runtimeInfo);
 
-            var corProcess = debugger.DebugActiveProcess(processId, win32Attach: false);
+            //var process = Process.Start("SampleProcess.exe");
+
+
+            //var corProcess = debugger.DebugActiveProcess(process.Id, win32Attach: false);
+            var corProcess = debugger.CreateProcess("SampleProcess.exe", "", ".", 0x10);
             corProcess.OnAssemblyLoad += CorProcess_OnAssemblyLoad;
             corProcess.OnBreak += CorProcess_OnBreak1;
+
+            var appDomains = MakeGeneric<CorAppDomain>(corProcess.AppDomains);
+
+            var firstDomain = appDomains.First();
+            var assemblies = MakeGeneric<CorAssembly>(firstDomain.Assemblies);
+
+            var isRunning = corProcess.IsRunning();
+            //var corProcess = debugger.DebugActiveProcess(processId, win32Attach: false);
+
+
 
             corProcess.Stop(-1);
             //Debugger -> ModuleEnumerator 
@@ -60,6 +74,19 @@ namespace MinimalDebuggerForEnC
             //ModuleEnumerator -> CorAssembly
             //CorAseembly -> CorDebubger
 
+        }
+
+        private static IEnumerable<T> MakeGeneric<T>(IEnumerable enumerable)
+        {
+            var list = new List<T>();
+
+            foreach(var rawItem in enumerable)
+            {
+                T item = (T)rawItem;
+                list.Add(item);
+            }
+
+            return list;
         }
 
         private static void CorProcess_OnBreak1(object sender, CorThreadEventArgs e)
