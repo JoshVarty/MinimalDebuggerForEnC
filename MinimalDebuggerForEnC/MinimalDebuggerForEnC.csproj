@@ -51,9 +51,17 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\corapi\corapi.csproj">
+      <Project>{04ef9865-e1b1-403d-802b-e4faea50a634}</Project>
+      <Name>corapi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NativeDebugWrappers\NativeDebugWrappers.csproj">
       <Project>{3991ab6c-468b-4c28-95fc-3188cfb34180}</Project>
       <Name>NativeDebugWrappers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\raw\raw.csproj">
+      <Project>{c18d303b-2c55-43eb-a3df-39cf3fb1d447}</Project>
+      <Name>raw</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
