@@ -116,7 +116,7 @@ namespace Microsoft.Samples.Debugging.CorDebug
         /**
          * Specify the callback object to use for managed events.
          */
-        internal void SetManagedHandler(ICorDebugManagedCallback managedCallback)
+        public void SetManagedHandler(ICorDebugManagedCallback managedCallback)
         {
             m_debugger.SetManagedHandler(managedCallback);
         }
@@ -124,7 +124,7 @@ namespace Microsoft.Samples.Debugging.CorDebug
         /**
          * Specify the callback object to use for unmanaged events.
          */
-        internal void SetUnmanagedHandler(ICorDebugUnmanagedCallback nativeCallback)
+        public void SetUnmanagedHandler(ICorDebugUnmanagedCallback nativeCallback)
         {
             m_debugger.SetUnmanagedHandler(nativeCallback);
         }
@@ -763,7 +763,7 @@ namespace Microsoft.Samples.Debugging.CorDebug
     // You're expected to get this interface from mscoree!GetCLRMetaHost.
     // Details for APIs are in metahost.idl.
     [ComImport, InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown), Guid("D332DB9E-B9B3-4125-8207-A14884F53216")]
-    internal interface ICLRMetaHost
+    public interface ICLRMetaHost
     {
         [return: MarshalAs(UnmanagedType.Interface)]
         System.Object GetRuntime(
@@ -863,7 +863,7 @@ namespace Microsoft.Samples.Debugging.CorDebug
     // You're expected to get this interface from mscoree!CLRCreateInstance.
     // Details for APIs are in metahost.idl.
     [ComImport, InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown), Guid("E2190695-77B2-492E-8E14-C4B3A7FDD593")]
-    internal interface ICLRMetaHostPolicy
+    public interface ICLRMetaHostPolicy
     {
         [return: MarshalAs(UnmanagedType.Interface)]
         System.Object GetRequestedRuntime([In, ComAliasName("metahost.assembly.MetaHostPolicyFlags")] CLRMetaHostPolicy.MetaHostPolicyFlags dwPolicyFlags,
@@ -880,9 +880,8 @@ namespace Microsoft.Samples.Debugging.CorDebug
     // Wrapper for ICLRRuntimeInfo.  Represents information about a CLR install instance.
     public sealed class CLRRuntimeInfo
     {
-
         private static Guid m_ClsIdClrDebuggingLegacy = new Guid("DF8395B5-A4BA-450b-A77C-A9A47762C520");
-        private ICLRRuntimeInfo m_runtimeInfo;
+        public ICLRRuntimeInfo m_runtimeInfo;
 
         public CLRRuntimeInfo(System.Object clrRuntimeInfo)
         {
@@ -921,7 +920,7 @@ namespace Microsoft.Samples.Debugging.CorDebug
 
     // Details about this interface are in metahost.idl.
     [ComImport, InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown), Guid("BD39D1D2-BA2F-486A-89B0-B4B0CB466891")]
-    internal interface ICLRRuntimeInfo
+    public interface ICLRRuntimeInfo
     {
         // Marshalling pcchBuffer as int even though it's unsigned. Max version string is 24 characters, so we should not need to go over 2 billion soon.
         void GetVersionString([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pwzBuffer,
@@ -1153,7 +1152,7 @@ namespace Microsoft.Samples.Debugging.CorDebug
 
     // Wrapper for standard COM IEnumUnknown, needed for ICLRMetaHost enumeration APIs.
     [ComImport, InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown), Guid("00000100-0000-0000-C000-000000000046")]
-    internal interface IEnumUnknown
+    public interface IEnumUnknown
     {
 
         [PreserveSig]
@@ -2613,7 +2612,7 @@ namespace Microsoft.Samples.Debugging.CorDebug
         OnExceptionInCallback,
         OnCustomNotification
     }
-    internal enum ManagedCallbackTypeCount
+    public enum ManagedCallbackTypeCount
     {
         Last = ManagedCallbackType.OnCustomNotification,
     }
