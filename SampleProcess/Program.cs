@@ -14,6 +14,6 @@ class Program
 
     private static void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
-        Console.WriteLine("Hit " + count++);
+        Console.WriteLine("ORIGINAL " + count++);
     }
 }
