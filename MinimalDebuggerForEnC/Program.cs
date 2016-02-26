@@ -21,25 +21,8 @@ namespace MinimalDebuggerForEnC
             AttachToProcess();
         }
 
-        private static void CreateAndApplyChangesToProcess()
-        {
-            //Metahost class and Interface GUID
-            Guid classId = new Guid("9280188D-0E8E-4867-B30C-7FA83884E8DE");
-            Guid interfaceId = new Guid("D332DB9E-B9B3-4125-8207-A14884F53216");
-
-            dynamic rawMetaHost;
-            Microsoft.Samples.Debugging.CorDebug.NativeMethods.CLRCreateInstance(ref classId, ref interfaceId, out rawMetaHost);
-
-            ICLRMetaHost metaHost = (ICLRMetaHost)rawMetaHost;
-
-            //var runtimes = metaHost.EnumerateLoadedRuntimes(process.Handle);
-            AttachToProcess();
-        }
-
         private static void AttachToProcess()
         {
-            //var process = Process.GetProcessById(processId);
-
             Guid classId = new Guid("9280188D-0E8E-4867-B30C-7FA83884E8DE");        //TODO: Constant with explanatory names
             Guid interfaceId = new Guid("D332DB9E-B9B3-4125-8207-A14884F53216");
 
@@ -54,11 +37,16 @@ namespace MinimalDebuggerForEnC
 
             var process = Process.Start("SampleProcess.exe");
 
+            //For some reason when we attach the debugger or create a process, all threads are stopped.
+            //If we don't wait long enough, the assemblies and modules aren't loaded. 
+            //I need to figure out how to let execution continue while the debugger is attached.
             Thread.Sleep(5000);
-            var corProcess = debugger.DebugActiveProcess(process.Id, win32Attach: false);
+
+            //Same as above, if we create the process it's immediately suspended
             //var corProcess = debugger.CreateProcess("SampleProcess.exe", "", ".", 0x10);
-            corProcess.OnAssemblyLoad += CorProcess_OnAssemblyLoad;
-            corProcess.OnBreak += CorProcess_OnBreak1;
+
+            var corProcess = debugger.DebugActiveProcess(process.Id, win32Attach: false);
+
 
             var appDomains = MakeGeneric<CorAppDomain>(corProcess.AppDomains);
 
@@ -77,8 +65,6 @@ namespace MinimalDebuggerForEnC
                     module.ApplyChanges(metadataDelta, ilDelta);
                 }
             }
-
-            //corProcess.Stop(-1);
         }
 
         private static IEnumerable<T> MakeGeneric<T>(IEnumerable enumerable)
@@ -92,24 +78,6 @@ namespace MinimalDebuggerForEnC
             }
 
             return list;
-        }
-
-        private static void CorProcess_OnBreak1(object sender, CorThreadEventArgs e)
-        {
-            var appDomain = e.AppDomain;
-            var assemblies = appDomain.Assemblies;
-        }
-
-        private static void CorProcess_OnAssemblyLoad(object sender, CorAssemblyEventArgs e)
-        {
-            var appDomain = e.AppDomain;
-            var assemblies = appDomain.Assemblies;
-        }
-
-        private static void CorProcess_OnBreak(object sender, CorThreadEventArgs e)
-        {
-            var appDomain = e.AppDomain;
-            var assemblies = appDomain.Assemblies;
         }
 
         private static CorDebugger CreateDebugger(ICLRRuntimeInfo runtime)
@@ -137,22 +105,6 @@ namespace MinimalDebuggerForEnC
             }
 
             return null;
-        }
-
-        // Retrieve information about runtimes installed on the machine (i.e. in %WINDIR%\Microsoft.NET\)
-        public static IEnumerable<CLRRuntimeInfo> EnumerateInstalledRuntimes(ICLRMetaHost metaHost)
-        {
-            List<CLRRuntimeInfo> runtimes = new List<CLRRuntimeInfo>();
-            IEnumUnknown enumRuntimes = metaHost.EnumerateInstalledRuntimes();
-
-            // Since we're only getting one at a time, we can pass NULL for count.
-            // S_OK also means we got the single element we asked for.
-            for (object oIUnknown; enumRuntimes.Next(1, out oIUnknown, IntPtr.Zero) == 0; /* empty */)
-            {
-                runtimes.Add(new CLRRuntimeInfo(oIUnknown));
-            }
-
-            return runtimes;
         }
 
         // Retrieve information about runtimes that are currently loaded into the target process.
