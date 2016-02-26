@@ -18,10 +18,10 @@ namespace MinimalDebuggerForEnC
     {
         static void Main(string[] args)
         {
-            AttachToProcess();
+            AttachToProcessAndApplyChanges();
         }
 
-        private static void AttachToProcess()
+        private static void AttachToProcessAndApplyChanges()
         {
             Guid classId = new Guid("9280188D-0E8E-4867-B30C-7FA83884E8DE");        //TODO: Constant with explanatory names
             Guid interfaceId = new Guid("D332DB9E-B9B3-4125-8207-A14884F53216");
@@ -44,9 +44,7 @@ namespace MinimalDebuggerForEnC
 
             //Same as above, if we create the process it's immediately suspended
             //var corProcess = debugger.CreateProcess("SampleProcess.exe", "", ".", 0x10);
-
             var corProcess = debugger.DebugActiveProcess(process.Id, win32Attach: false);
-
 
             var appDomains = MakeGeneric<CorAppDomain>(corProcess.AppDomains);
             var firstDomain = appDomains.Single();
