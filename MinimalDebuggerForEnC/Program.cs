@@ -10,6 +10,7 @@ using Microsoft.Samples.Debugging.CorDebug;
 using Microsoft.Samples.Debugging.CorDebug.NativeApi;
 using System.IO;
 using System.Collections;
+using System.Threading;
 
 namespace MinimalDebuggerForEnC
 {
@@ -48,11 +49,11 @@ namespace MinimalDebuggerForEnC
             var runtime_v40 = GetLoadedRuntimeByVersion(metaHost, currentProcess.Id, "v4.0");
             var debugger = CreateDebugger(runtime_v40.m_runtimeInfo);
 
-            //var process = Process.Start("SampleProcess.exe");
+            var process = Process.Start("SampleProcess.exe");
 
-
-            //var corProcess = debugger.DebugActiveProcess(process.Id, win32Attach: false);
-            var corProcess = debugger.CreateProcess("SampleProcess.exe", "", ".", 0x10);
+            Thread.Sleep(2000);
+            var corProcess = debugger.DebugActiveProcess(process.Id, win32Attach: false);
+            //var corProcess = debugger.CreateProcess("SampleProcess.exe", "", ".", 0x10);
             corProcess.OnAssemblyLoad += CorProcess_OnAssemblyLoad;
             corProcess.OnBreak += CorProcess_OnBreak1;
 
@@ -60,20 +61,19 @@ namespace MinimalDebuggerForEnC
 
             var firstDomain = appDomains.First();
             var assemblies = MakeGeneric<CorAssembly>(firstDomain.Assemblies);
+            var threads = MakeGeneric<CorThread>(firstDomain.Threads);
 
-            var isRunning = corProcess.IsRunning();
-            //var corProcess = debugger.DebugActiveProcess(processId, win32Attach: false);
+            foreach(var assembly in assemblies)
+            {
+                if (assembly.Name.EndsWith("SampleProcess.exe"))
+                {
+                    var modules = MakeGeneric<CorModule>(assembly.Modules);
+                    var module = modules.First();
+                    //var xx = module.ApplyChanges();
+                }
+            }
 
-
-
-            corProcess.Stop(-1);
-            //Debugger -> ModuleEnumerator 
-
-
-
-            //ModuleEnumerator -> CorAssembly
-            //CorAseembly -> CorDebubger
-
+            //corProcess.Stop(-1);
         }
 
         private static IEnumerable<T> MakeGeneric<T>(IEnumerable enumerable)
