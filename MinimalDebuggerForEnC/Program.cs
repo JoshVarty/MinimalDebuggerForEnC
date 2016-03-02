@@ -57,9 +57,7 @@ namespace MinimalDebuggerForEnC
             var ilDelta = new byte[] { 0, 0, 0, 0, 62, 0, 24, 40, 7, 0, 0, 10, 0, 40, 8, 0, 0, 10, 38, 42 };
 
             //Calls down to ICorDebugModule2::ApplyChanges
-
-            //I'm currently getting AccessViolationExceptions, so I'm assuming my IL is incorrect :(
-            corProcess.Stop(-1);
+            //I'm currently getting AccessViolationExceptions, so I'm assuming my IL/Metadata is incorrect :(
             sampleProcessModule.ApplyChanges(metadataDelta, ilDelta);
         }
 
