@@ -21,6 +21,7 @@ namespace MinimalDebuggerForEnC
             AttachToProcessAndApplyChanges();
         }
 
+
         private static void AttachToProcessAndApplyChanges()
         {
             Guid classId = new Guid("9280188D-0E8E-4867-B30C-7FA83884E8DE");        //TODO: Constant with explanatory names
@@ -35,16 +36,20 @@ namespace MinimalDebuggerForEnC
             var runtime_v40 = GetLoadedRuntimeByVersion(metaHost, currentProcess.Id, "v4.0");
             var debugger = CreateDebugger(runtime_v40.m_runtimeInfo);
 
-            var process = Process.Start("SampleProcess.exe");
-
             //For some reason when we attach the debugger or create a process, all threads are stopped.
             //If we don't wait long enough, the assemblies and modules aren't loaded. 
             //I need to figure out how to let execution continue while the debugger is attached.
-            Thread.Sleep(5000);
 
             //Same as above, if we create the process it's immediately suspended
-            //var corProcess = debugger.CreateProcess("SampleProcess.exe", "", ".", 0x10);
-            CorProcess corProcess = debugger.DebugActiveProcess(process.Id, win32Attach: false);
+            var corProcess = debugger.CreateProcess("SampleProcess.exe", "", ".", 0x10);
+            corProcess.OnModuleLoad += CorProcess_OnModuleLoad;
+            //CorProcess corProcess = debugger.DebugActiveProcess(process.Id, win32Attach: false);
+            corProcess.Continue(false);
+
+            Console.WriteLine("After continuing, is running: " + corProcess.IsRunning());
+            Console.WriteLine("Waiting for five seconds... ");
+            Thread.Sleep(5000);
+            Console.WriteLine("Trying...");
 
             List<CorAppDomain> appDomains = corProcess.AppDomains.Cast<CorAppDomain>().ToList();
             var firstDomain = appDomains.Single();
@@ -52,15 +57,35 @@ namespace MinimalDebuggerForEnC
 
             CorAssembly sampleProcessAssembly = assemblies.Where(n => n.Name.EndsWith("SampleProcess.exe")).Single();
             CorModule sampleProcessModule = sampleProcessAssembly.Modules.Cast<CorModule>().Single();
-
             var metadataDelta = new byte[] { 66, 83, 74, 66, 1, 0, 1, 0, 0, 0, 0, 0, 12, 0, 0, 0, 118, 52, 46, 48, 46, 51, 48, 51, 49, 57, 0, 0, 0, 0, 6, 0, 124, 0, 0, 0, 240, 0, 0, 0, 35, 45, 0, 0, 108, 1, 0, 0, 96, 0, 0, 0, 35, 83, 116, 114, 105, 110, 103, 115, 0, 0, 0, 0, 204, 1, 0, 0, 4, 0, 0, 0, 35, 85, 83, 0, 208, 1, 0, 0, 48, 0, 0, 0, 35, 71, 85, 73, 68, 0, 0, 0, 0, 2, 0, 0, 24, 0, 0, 0, 35, 66, 108, 111, 98, 0, 0, 0, 24, 2, 0, 0, 0, 0, 0, 0, 35, 74, 84, 68, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 167, 1, 67, 4, 0, 192, 8, 0, 0, 0, 0, 250, 1, 51, 0, 22, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0, 0, 1, 0, 0, 0, 1, 0, 84, 1, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 132, 1, 0, 0, 125, 1, 0, 0, 10, 0, 0, 0, 57, 1, 0, 0, 125, 1, 0, 0, 4, 0, 0, 0, 0, 0, 150, 0, 46, 1, 0, 0, 107, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 74, 1, 0, 0, 89, 0, 0, 0, 65, 0, 0, 0, 65, 1, 0, 0, 94, 0, 0, 0, 2, 0, 0, 35, 0, 0, 0, 0, 7, 0, 0, 10, 0, 0, 0, 0, 8, 0, 0, 10, 0, 0, 0, 0, 7, 0, 0, 1, 0, 0, 0, 0, 8, 0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 6, 0, 0, 0, 0, 7, 0, 0, 1, 8, 0, 0, 1, 2, 0, 0, 6, 7, 0, 0, 10, 8, 0, 0, 10, 2, 0, 0, 35, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 98, 0, 0, 0, 48, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 0, 109, 115, 99, 111, 114, 108, 105, 98, 0, 67, 111, 110, 115, 111, 108, 101, 0, 82, 101, 97, 100, 76, 105, 110, 101, 0, 87, 114, 105, 116, 101, 76, 105, 110, 101, 0, 100, 54, 98, 97, 100, 98, 100, 55, 45, 54, 51, 101, 56, 45, 52, 55, 97, 54, 45, 56, 102, 100, 53, 45, 50, 54, 97, 50, 100, 54, 52, 99, 56, 50, 97, 51, 46, 100, 108, 108, 0, 83, 121, 115, 116, 101, 109, 0, 79, 98, 106, 101, 99, 116, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 86, 17, 51, 94, 85, 187, 217, 68, 141, 133, 74, 91, 141, 61, 239, 168, 44, 49, 229, 68, 17, 154, 228, 65, 134, 136, 148, 49, 68, 213, 69, 43, 0, 4, 0, 1, 1, 8, 3, 0, 0, 14, 8, 183, 122, 92, 86, 25, 52, 224, 137, 3, 0, 0, 1, 0 };
             var ilDelta = new byte[] { 0, 0, 0, 0, 62, 0, 24, 40, 7, 0, 0, 10, 0, 40, 8, 0, 0, 10, 38, 42 };
 
-            //Calls down to ICorDebugModule2::ApplyChanges
-
-            //I'm currently getting AccessViolationExceptions, so I'm assuming my IL is incorrect :(
+            Console.WriteLine("Before stopping, is running: " + corProcess.IsRunning());
+            //stop process
             corProcess.Stop(-1);
+            Console.WriteLine("After stopping, is running: " + corProcess.IsRunning());
+            //Calls down to ICorDebugModule2::ApplyChanges
+            //I'm currently getting AccessViolationExceptions, so I'm assuming my IL is incorrect :(
             sampleProcessModule.ApplyChanges(metadataDelta, ilDelta);
+
+            Console.ReadLine();
+        }
+
+        private static void CorProcess_OnModuleLoad(object sender, CorModuleEventArgs e)
+        {
+            var module = e.Module;
+            if(!module.Name.Contains("SampleProcess"))
+            {
+                return;
+            }
+
+
+            Console.Write("Is running: " + e.Process.IsRunning());
+            var compilerFlags = module.JITCompilerFlags;
+            module.JITCompilerFlags = CorDebugJITCompilerFlags.CORDEBUG_JIT_ENABLE_ENC;
+
+
+            //e.Process.Continue(false);
         }
 
         private static CorDebugger CreateDebugger(ICLRRuntimeInfo runtime)
