@@ -65,7 +65,7 @@ namespace MinimalDebuggerForEnC
             corProcess.Stop(-1);
             Console.WriteLine("After stopping, is running: " + corProcess.IsRunning());
             //Calls down to ICorDebugModule2::ApplyChanges
-            //I'm currently getting AccessViolationExceptions, so I'm assuming my IL is incorrect :(
+            //I'm currently getting AccessViolationExceptions, so I'm assuming my IL/Metadata is incorrect :(
             sampleProcessModule.ApplyChanges(metadataDelta, ilDelta);
 
             Console.ReadLine();
