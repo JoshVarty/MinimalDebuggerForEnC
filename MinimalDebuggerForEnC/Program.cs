@@ -46,6 +46,8 @@ namespace MinimalDebuggerForEnC
             //CorProcess corProcess = debugger.DebugActiveProcess(process.Id, win32Attach: false);
             corProcess.Continue(false);
 
+
+            //Now we'll wait for five seconds for everything to load and the JIT flags to be set.
             Console.WriteLine("After continuing, is running: " + corProcess.IsRunning());
             Console.WriteLine("Waiting for five seconds... ");
             Thread.Sleep(5000);
@@ -64,7 +66,7 @@ namespace MinimalDebuggerForEnC
             //stop process
             corProcess.Stop(-1);
             Console.WriteLine("After stopping, is running: " + corProcess.IsRunning());
-            //Calls down to ICorDebugModule2::ApplyChanges
+
             //I'm currently getting AccessViolationExceptions, so I'm assuming my IL/Metadata is incorrect :(
             sampleProcessModule.ApplyChanges(metadataDelta, ilDelta);
 
@@ -74,18 +76,14 @@ namespace MinimalDebuggerForEnC
         private static void CorProcess_OnModuleLoad(object sender, CorModuleEventArgs e)
         {
             var module = e.Module;
-            if(!module.Name.Contains("SampleProcess"))
+            if (!module.Name.Contains("SampleProcess"))
             {
                 return;
             }
 
-
             Console.Write("Is running: " + e.Process.IsRunning());
             var compilerFlags = module.JITCompilerFlags;
             module.JITCompilerFlags = CorDebugJITCompilerFlags.CORDEBUG_JIT_ENABLE_ENC;
-
-
-            //e.Process.Continue(false);
         }
 
         private static CorDebugger CreateDebugger(ICLRRuntimeInfo runtime)
