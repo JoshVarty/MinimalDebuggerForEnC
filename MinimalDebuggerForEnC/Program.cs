@@ -11,6 +11,7 @@ using Microsoft.Samples.Debugging.CorDebug.NativeApi;
 using System.IO;
 using System.Collections;
 using System.Threading;
+using Microsoft.Samples.Debugging.CorMetadata.NativeApi;
 
 namespace MinimalDebuggerForEnC
 {
@@ -26,6 +27,12 @@ namespace MinimalDebuggerForEnC
         {
             Guid classId = new Guid("9280188D-0E8E-4867-B30C-7FA83884E8DE");        //TODO: Constant with explanatory names
             Guid interfaceId = new Guid("D332DB9E-B9B3-4125-8207-A14884F53216");
+
+            //Metadata updates have an MVID in them that is supposed to match the original assembly. The updates here
+            //weren't created that way. Thankfully there is a magic internal environment variable that disables these checks.
+            //The checks happen both in the debugger and the debuggee, but setting it here will propogate it to the debuggee
+            //when we launch it later.
+            Environment.SetEnvironmentVariable("COMPLUS_MD_DeltaCheck", "0");
 
             dynamic rawMetaHost;
             Microsoft.Samples.Debugging.CorDebug.NativeMethods.CLRCreateInstance(ref classId, ref interfaceId, out rawMetaHost);
@@ -43,6 +50,8 @@ namespace MinimalDebuggerForEnC
             //Same as above, if we create the process it's immediately suspended
             var corProcess = debugger.CreateProcess("SampleProcess.exe", "", ".", 0x10);
             corProcess.OnModuleLoad += CorProcess_OnModuleLoad;
+            corProcess.OnFunctionRemapOpportunity += CorProcess_OnFunctionRemapOpportunity;
+            corProcess.OnFunctionRemapComplete += CorProcess_OnFunctionRemapComplete;
             //CorProcess corProcess = debugger.DebugActiveProcess(process.Id, win32Attach: false);
             corProcess.Continue(false);
 
@@ -67,10 +76,37 @@ namespace MinimalDebuggerForEnC
             corProcess.Stop(-1);
             Console.WriteLine("After stopping, is running: " + corProcess.IsRunning());
 
-            //I'm currently getting AccessViolationExceptions, so I'm assuming my IL/Metadata is incorrect :(
+            //I found a bug in the ICorDebug API. Apparently the API assumes that you couldn't possibly have a change to apply
+            //unless you had first fetched the metadata for this module. Perhaps reasonable in the overall scenario, but
+            //its certainly not OK to simply throw an AV if it hadn't happened yet.
+            //
+            //In any case, fetching the metadata is a thankfully simple workaround
+            object import = sampleProcessModule.GetMetaDataInterface(typeof(IMetadataImport).GUID);
             sampleProcessModule.ApplyChanges(metadataDelta, ilDelta);
 
+            Console.WriteLine("EnC edit has been applied, continuing the debuggee");
+            Console.WriteLine("The debuggee has a Console.ReadLine(), so make sure you hit enter over there to keep executing code");
+            corProcess.Continue(false);
             Console.ReadLine();
+        }
+
+        private static void CorProcess_OnFunctionRemapComplete(object sender, CorFunctionRemapCompleteEventArgs e)
+        {
+            Console.WriteLine("Hurray, the debuggee is executing my new code");
+        }
+
+        private static void CorProcess_OnFunctionRemapOpportunity(object sender, CorFunctionRemapOpportunityEventArgs e)
+        {
+            //A remap opportunity is where the runtime can hijack the thread IP from the old version of the code and
+            //put it in the new version of the code. However the runtime has no idea how the old IL relates to the new
+            //IL, so it needs the debugger to tell it which new IL offset in the updated IL is the semantically equivalent of
+            //old IL offset the IP is at right now.
+            Console.WriteLine("The debuggee has hit a remap opportunity at: " + e.OldFunction + ":" + e.OldILOffset);
+
+            //I have no idea what this new IL looks like either, but lets start at the beginning of the method once again
+            int newILOffset = 0;
+            e.Thread.ActiveFrame.RemapFunction(newILOffset);
+            Console.WriteLine("Continuing the debuggee in the updated IL at IL offset: " + newILOffset);
         }
 
         private static void CorProcess_OnModuleLoad(object sender, CorModuleEventArgs e)
