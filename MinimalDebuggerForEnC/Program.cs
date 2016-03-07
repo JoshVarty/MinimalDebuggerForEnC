@@ -48,7 +48,6 @@ namespace MinimalDebuggerForEnC
             //I need to figure out how to let execution continue while the debugger is attached.
 
             //Same as above, if we create the process it's immediately suspended
-            var cur = Directory.GetCurrentDirectory();
             var corProcess = debugger.CreateProcess("SampleProcess.exe", "", @"../../../SampleExeWithILAndMetadata", 0x10);
             corProcess.OnModuleLoad += CorProcess_OnModuleLoad;
             corProcess.OnFunctionRemapOpportunity += CorProcess_OnFunctionRemapOpportunity;
@@ -59,7 +58,7 @@ namespace MinimalDebuggerForEnC
 
             //Now we'll wait for five seconds for everything to load and the JIT flags to be set.
             Console.WriteLine("After continuing, is running: " + corProcess.IsRunning());
-            Console.WriteLine("Waiting for five seconds... ");
+            Console.WriteLine("Waiting for two seconds... ");
             Thread.Sleep(2000);
             Console.WriteLine("Trying...");
 
