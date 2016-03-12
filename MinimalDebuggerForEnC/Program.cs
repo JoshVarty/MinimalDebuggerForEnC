@@ -22,7 +22,6 @@ namespace MinimalDebuggerForEnC
             AttachToProcessAndApplyChanges();
         }
 
-
         private static void AttachToProcessAndApplyChanges()
         {
             Guid classId = new Guid("9280188D-0E8E-4867-B30C-7FA83884E8DE");        //TODO: Constant with explanatory names

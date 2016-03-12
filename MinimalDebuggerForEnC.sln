@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "corapi", "corapi\corapi.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleProcess", "SampleProcess\SampleProcess.csproj", "{B78B361C-70FF-4FBA-A397-BDA1FDCC91D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalDebuggerForEnCWithRoslyn", "MinimalDebuggerForEnCWithRoslyn\MinimalDebuggerForEnCWithRoslyn.csproj", "{F7D5FA28-5409-40AC-A2BE-F0164910DE50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{B78B361C-70FF-4FBA-A397-BDA1FDCC91D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B78B361C-70FF-4FBA-A397-BDA1FDCC91D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B78B361C-70FF-4FBA-A397-BDA1FDCC91D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7D5FA28-5409-40AC-A2BE-F0164910DE50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7D5FA28-5409-40AC-A2BE-F0164910DE50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7D5FA28-5409-40AC-A2BE-F0164910DE50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7D5FA28-5409-40AC-A2BE-F0164910DE50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
