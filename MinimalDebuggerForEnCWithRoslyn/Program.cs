@@ -3,11 +3,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MinimalDebuggerForEnCWithRoslyn
 {
@@ -30,12 +28,21 @@ class C
                 syntaxTrees: new[] { tree }, references: new[] { Mscorlib }, options: options);
 
             var errs = compilation.GetDiagnostics().Where(n => n.Severity == DiagnosticSeverity.Error);
+            if(errs.Any())
+            {
+                throw new Exception("Can't be any errors in your compilation");
+            }
 
             var stream = new MemoryStream();
             var emitResult = compilation.Emit(stream);
 
+            //Make sure to reset the stream
             stream.Seek(0, SeekOrigin.Begin);
+
             var metadataModule = ModuleMetadata.CreateFromStream(stream, leaveOpen: true);
+            //var baseline = EmitBaseline.CreateInitialBaseline(metadataModule, )
         }
     }
+
+  
 }
