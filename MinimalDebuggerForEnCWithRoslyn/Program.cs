@@ -41,10 +41,10 @@ class C
             stream.Seek(0, SeekOrigin.Begin);
 
             var metadataModule = ModuleMetadata.CreateFromStream(stream, leaveOpen: true);
-            var reader = SymReaderFactory.CreateReader(pdbStream);
-            //var baseline = EmitBaseline.CreateInitialBaseline(metadataModule, )
+
+            var reader = SymReaderFactory.CreateReader(pdbStream); //TODO: Bring in native dll
+
+            var baseline = EmitBaseline.CreateInitialBaseline(metadataModule, SymReaderFactory.CreateReader(pdbStream).GetEncMethodDebugInfo);
         }
     }
-
-  
 }
