@@ -34,12 +34,14 @@ class C
             }
 
             var stream = new MemoryStream();
-            var emitResult = compilation.Emit(stream);
+            var pdbStream = new MemoryStream();
+            var emitResult = compilation.Emit(stream, pdbStream: pdbStream);
 
             //Make sure to reset the stream
             stream.Seek(0, SeekOrigin.Begin);
 
             var metadataModule = ModuleMetadata.CreateFromStream(stream, leaveOpen: true);
+            var reader = SymReaderFactory.CreateReader(pdbStream);
             //var baseline = EmitBaseline.CreateInitialBaseline(metadataModule, )
         }
     }

@@ -104,13 +104,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayBuilder.cs" />
     <Compile Include="ComStreamWrapper.cs" />
+    <Compile Include="CustomDebugInfoReader.cs" />
     <Compile Include="DummyMetadataImport.cs" />
+    <Compile Include="ObjectPool.cs" />
+    <Compile Include="PdbTestUtilities.cs" />
+    <Compile Include="PooledDictionary.cs" />
+    <Compile Include="PooledHashSet.cs" />
+    <Compile Include="PooledStringBuilder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamExtensions.cs" />
     <Compile Include="SymReaderFactory.cs" />
     <Compile Include="SymUnmanagedReaderExtensions.cs" />
+    <Compile Include="Token2SourceLineExporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
