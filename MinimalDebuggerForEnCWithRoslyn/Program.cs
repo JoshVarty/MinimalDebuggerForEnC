@@ -23,6 +23,27 @@ namespace MinimalDebuggerForEnCWithRoslyn
             Go().Wait();
         }
 
+        private static IEnumerable<SemanticEdit> GetDifferences(Solution originalSolution, Document newDocument, CancellationToken token = default(CancellationToken))
+        {
+            dynamic csharpEditAndContinueAnalyzer = Activator.CreateInstance(_csharpEditAndContinueAnalyzerType, nonPublic: true);
+
+            var bindingFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public;
+            Type[] targetParams = new Type[] { };
+
+            var immutableArray_Create_T = typeof(ImmutableArray).GetMethod("Create", bindingFlags, binder: null, types: targetParams, modifiers: null);
+            var immutableArray_Create_ActiveStatementSpan = immutableArray_Create_T.MakeGenericMethod(_activeStatementSpanType);
+
+            var immutableArray_ActiveStatementSpan = immutableArray_Create_ActiveStatementSpan.Invoke(null, new object[] { });
+            var method = (MethodInfo)csharpEditAndContinueAnalyzer.GetType().GetMethod("AnalyzeDocumentAsync");
+            var myParams = new object[] { originalSolution, immutableArray_ActiveStatementSpan, newDocument, token };
+            object task = method.Invoke(csharpEditAndContinueAnalyzer, myParams);
+
+            var documentAnalysisResults = task.GetType().GetProperty("Result").GetValue(task);
+
+            var edits = (IEnumerable<SemanticEdit>)documentAnalysisResults.GetType().GetField("SemanticEdits", bindingFlags).GetValue(documentAnalysisResults);
+            return edits;
+        }
+
         private static async Task Go()
         {
             var text = @"
@@ -53,25 +74,11 @@ namespace MinimalDebuggerForEnCWithRoslyn
             var reader = SymReaderFactory.CreateReader(pdbStream);
             var baseline = EmitBaseline.CreateInitialBaseline(metadataModule, SymReaderFactory.CreateReader(pdbStream).GetEncMethodDebugInfo);
 
-            dynamic csharpEditAndContinueAnalyzer = Activator.CreateInstance(_csharpEditAndContinueAnalyzerType, nonPublic: true);
-
-            var bindingFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public;
-            Type[] targetParams = new Type[] { };
-
-            var immutableArray_Create_T = typeof(ImmutableArray).GetMethod("Create", bindingFlags, binder: null, types: targetParams, modifiers: null);
-            var immutableArray_Create_ActiveStatementSpan = immutableArray_Create_T.MakeGenericMethod(_activeStatementSpanType);
-
-            var immutableArray_ActiveStatementSpan = immutableArray_Create_ActiveStatementSpan.Invoke(null, new object[] { });
-
             //TODO: Generate a document with differences.
             var document = soln.Projects.Single().Documents.Single();
             var token = new CancellationToken();
 
-            var method = (MethodInfo)csharpEditAndContinueAnalyzer.GetType().GetMethod("AnalyzeDocumentAsync");
-            var myParams = new object[] { soln, immutableArray_ActiveStatementSpan, document, token };
-            dynamic task = method.Invoke(csharpEditAndContinueAnalyzer, myParams);
-
-            var documentAnalysisResults = task.GetType().GetProperty("Result").GetValue(task);
+            var differences = GetDifferences(soln, document);
         }
 
         private static Solution createSolution(string text)
