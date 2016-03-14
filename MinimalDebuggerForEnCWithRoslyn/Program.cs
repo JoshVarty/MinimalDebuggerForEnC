@@ -54,6 +54,15 @@ namespace MinimalDebuggerForEnCWithRoslyn
                 System.Console.WriteLine(""Hello"");
             }
         }";
+
+            var newText = @"
+        class C
+        {
+            public static void Main()
+            {
+                System.Console.WriteLine(""Hello World"");
+            }
+        }";
             var soln = createSolution(text);
 
             var options = new CSharpCompilationOptions(OutputKind.ConsoleApplication, moduleName: "MyCompilation");
@@ -76,9 +85,9 @@ namespace MinimalDebuggerForEnCWithRoslyn
 
             //TODO: Generate a document with differences.
             var document = soln.Projects.Single().Documents.Single();
-            var token = new CancellationToken();
+            var newDocument = document.WithText(SourceText.From(newText, System.Text.ASCIIEncoding.ASCII));
 
-            var differences = GetDifferences(soln, document);
+            var differences = GetDifferences(soln, newDocument);
         }
 
         private static Solution createSolution(string text)
