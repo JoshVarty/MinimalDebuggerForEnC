@@ -18,8 +18,6 @@ namespace MinimalDebuggerForEnCWithRoslyn
         static readonly Type _csharpEditAndContinueAnalyzerType = Type.GetType("Microsoft.CodeAnalysis.CSharp.EditAndContinue.CSharpEditAndContinueAnalyzer, Microsoft.CodeAnalysis.CSharp.Features");
         static readonly Type _activeStatementSpanType = Type.GetType("Microsoft.CodeAnalysis.EditAndContinue.ActiveStatementSpan, Microsoft.CodeAnalysis.Features");
 
-        static readonly Type _immutableArrayType = Type.GetType("System.Collections.Immutable.ImmutableArray`1, System.Collections.Immutable");
-
         static void Main(string[] args)
         {
             Go().Wait();
@@ -56,8 +54,6 @@ namespace MinimalDebuggerForEnCWithRoslyn
             var baseline = EmitBaseline.CreateInitialBaseline(metadataModule, SymReaderFactory.CreateReader(pdbStream).GetEncMethodDebugInfo);
 
             dynamic csharpEditAndContinueAnalyzer = Activator.CreateInstance(_csharpEditAndContinueAnalyzerType, nonPublic: true);
-
-            var activespan = Activator.CreateInstance(_activeStatementSpanType, nonPublic: true);
 
             var bindingFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public;
             Type[] targetParams = new Type[] { };
