@@ -7,11 +7,15 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace MinimalDebuggerForEnCWithRoslyn
 {
     class Program
     {
+        static readonly Type _csharpEditAndContinueAnalyzerType = Type.GetType("Microsoft.CodeAnalysis.CSharp.EditAndContinue.CSharpEditAndContinueAnalyzer, Microsoft.CodeAnalysis.CSharp.Features");
+        static readonly Type _activeStatementSpanType = Type.GetType("Microsoft.CodeAnalysis.EditAndContinue.ActiveStatementSpan, Microsoft.CodeAnalysis.Features");
+
         static void Main(string[] args)
         {
             var text = @"
@@ -39,18 +43,21 @@ namespace MinimalDebuggerForEnCWithRoslyn
             stream.Seek(0, SeekOrigin.Begin);
 
             var metadataModule = ModuleMetadata.CreateFromStream(stream, leaveOpen: true);
-
             var reader = SymReaderFactory.CreateReader(pdbStream); 
-
             var baseline = EmitBaseline.CreateInitialBaseline(metadataModule, SymReaderFactory.CreateReader(pdbStream).GetEncMethodDebugInfo);
 
-            dynamic csharpEditAndContinueAnalyzer = Activator.CreateInstance("Microsoft.CodeAnalysis.CSharp.Features", "Microsoft.CodeAnalysis.CSharp.EditAndContinue.CSharpEditAndContinueAnalyzer");
+            dynamic csharpEditAndContinueAnalyzer = Activator.CreateInstance(_csharpEditAndContinueAnalyzerType, nonPublic: true);
 
+            var activespan = Activator.CreateInstance(_activeStatementSpanType, nonPublic: true);
+
+            var document = soln.Projects.Single().Documents.Single();
+            var token = new CancellationToken();
+
+            //Microsoft.CodeAnalysis.ActiveStatementSpan x;
 
             //public Task<DocumentAnalysisResults> AnalyzeDocumentAsync(
             //    Solution baseSolution, 
-            //    ImmutableArray<ActiveStatementSpan> 
-            //    baseActiveStatements, 
+            //    ImmutableArray<ActiveStatementSpan> baseActiveStatements, 
             //    Document document, 
             //    CancellationToken cancellationToken);
 
