@@ -23,7 +23,7 @@ namespace MinimalDebuggerForEnCWithRoslyn
             Go().Wait();
         }
 
-        private static IEnumerable<SemanticEdit> GetDifferences(Solution originalSolution, Document newDocument, CancellationToken token = default(CancellationToken))
+        private static IEnumerable<SemanticEdit> GetEdits(Solution originalSolution, Document newDocument, CancellationToken token = default(CancellationToken))
         {
             dynamic csharpEditAndContinueAnalyzer = Activator.CreateInstance(_csharpEditAndContinueAnalyzerType, nonPublic: true);
 
@@ -51,7 +51,8 @@ namespace MinimalDebuggerForEnCWithRoslyn
         {
             public static void Main()
             {
-                System.Console.WriteLine(""Hello"");
+                int x = 5;
+                System.Console.WriteLine(5);
             }
         }";
 
@@ -60,7 +61,8 @@ namespace MinimalDebuggerForEnCWithRoslyn
         {
             public static void Main()
             {
-                System.Console.WriteLine(""Hello World"");
+                int x = 5 + 10;
+                System.Console.WriteLine(x);
             }
         }";
             var soln = createSolution(text);
@@ -87,7 +89,16 @@ namespace MinimalDebuggerForEnCWithRoslyn
             var document = soln.Projects.Single().Documents.Single();
             var newDocument = document.WithText(SourceText.From(newText, System.Text.ASCIIEncoding.ASCII));
 
-            var differences = GetDifferences(soln, newDocument);
+            var edits = GetEdits(soln, newDocument);
+
+            var metadataStream = new MemoryStream();
+            var ilStream = new MemoryStream();
+            var newPdbStream = new MemoryStream();
+            var updatedMethods = new List<System.Reflection.Metadata.MethodDefinitionHandle>();
+
+            var newEmitResult = compilation.EmitDifference(baseline, edits, metadataStream, ilStream, newPdbStream, updatedMethods);
+
+            var buf = ilStream.GetBuffer();
         }
 
         private static Solution createSolution(string text)
