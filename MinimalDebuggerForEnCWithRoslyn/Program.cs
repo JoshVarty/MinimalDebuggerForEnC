@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
+using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -13,29 +14,26 @@ namespace MinimalDebuggerForEnCWithRoslyn
     {
         static void Main(string[] args)
         {
-            var tree = CSharpSyntaxTree.ParseText(@"
-class C
-{
-    public static void Main()
-    {
-        System.Console.WriteLine(""Hello"");
-    }
-}");
-
-            var Mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-            var options = new CSharpCompilationOptions(OutputKind.ConsoleApplication, moduleName: "MyCompilation");
-            var compilation = CSharpCompilation.Create("MyCompilation.dll",
-                syntaxTrees: new[] { tree }, references: new[] { Mscorlib }, options: options);
-
-            var errs = compilation.GetDiagnostics().Where(n => n.Severity == DiagnosticSeverity.Error);
-            if(errs.Any())
+            var text = @"
+        class C
+        {
+            public static void Main()
             {
-                throw new Exception("Can't be any errors in your compilation");
+                System.Console.WriteLine(""Hello"");
             }
+        }";
+            var soln = createSolution(text);
+
+            var options = new CSharpCompilationOptions(OutputKind.ConsoleApplication, moduleName: "MyCompilation");
+            var compilation = soln.Projects.Single().GetCompilationAsync().Result;
 
             var stream = new MemoryStream();
             var pdbStream = new MemoryStream();
             var emitResult = compilation.Emit(stream, pdbStream: pdbStream);
+            if(!emitResult.Success)
+            {
+                throw new InvalidOperationException("Errors in compilation: " + emitResult.Diagnostics);
+            }
 
             //Make sure to reset the stream
             stream.Seek(0, SeekOrigin.Begin);
@@ -45,6 +43,31 @@ class C
             var reader = SymReaderFactory.CreateReader(pdbStream); 
 
             var baseline = EmitBaseline.CreateInitialBaseline(metadataModule, SymReaderFactory.CreateReader(pdbStream).GetEncMethodDebugInfo);
+
+            dynamic csharpEditAndContinueAnalyzer = Activator.CreateInstance("Microsoft.CodeAnalysis.CSharp.Features", "Microsoft.CodeAnalysis.CSharp.EditAndContinue.CSharpEditAndContinueAnalyzer");
+
+
+            //public Task<DocumentAnalysisResults> AnalyzeDocumentAsync(
+            //    Solution baseSolution, 
+            //    ImmutableArray<ActiveStatementSpan> 
+            //    baseActiveStatements, 
+            //    Document document, 
+            //    CancellationToken cancellationToken);
+
+            //dynamic results = csharpEditAndContinueAnalyzer.AnalyzeDocumentAsync(soln, ImmutableArray<ActiveStatementSpan>.Create())
+        }
+
+        private static Solution createSolution(string text)
+        {
+            var tree = CSharpSyntaxTree.ParseText(text);
+            var mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
+            var adHockWorkspace = new AdhocWorkspace();
+
+            var project = adHockWorkspace.AddProject(ProjectInfo.Create(ProjectId.CreateNewId(), VersionStamp.Default, "MyProject", "MyProject", "C#", metadataReferences: new List<MetadataReference>() { mscorlib } ));
+
+            adHockWorkspace.AddDocument(project.Id, "MyDocument.cs", SourceText.From(text, System.Text.Encoding.ASCII));
+
+            return adHockWorkspace.CurrentSolution;
         }
     }
 }
