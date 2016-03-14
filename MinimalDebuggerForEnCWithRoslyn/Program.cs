@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace MinimalDebuggerForEnCWithRoslyn
 {
@@ -16,7 +18,14 @@ namespace MinimalDebuggerForEnCWithRoslyn
         static readonly Type _csharpEditAndContinueAnalyzerType = Type.GetType("Microsoft.CodeAnalysis.CSharp.EditAndContinue.CSharpEditAndContinueAnalyzer, Microsoft.CodeAnalysis.CSharp.Features");
         static readonly Type _activeStatementSpanType = Type.GetType("Microsoft.CodeAnalysis.EditAndContinue.ActiveStatementSpan, Microsoft.CodeAnalysis.Features");
 
+        static readonly Type _immutableArrayType = Type.GetType("System.Collections.Immutable.ImmutableArray`1, System.Collections.Immutable");
+
         static void Main(string[] args)
+        {
+            Go().Wait();
+        }
+
+        private static async Task Go()
         {
             var text = @"
         class C
@@ -34,7 +43,7 @@ namespace MinimalDebuggerForEnCWithRoslyn
             var stream = new MemoryStream();
             var pdbStream = new MemoryStream();
             var emitResult = compilation.Emit(stream, pdbStream: pdbStream);
-            if(!emitResult.Success)
+            if (!emitResult.Success)
             {
                 throw new InvalidOperationException("Errors in compilation: " + emitResult.Diagnostics);
             }
@@ -43,25 +52,30 @@ namespace MinimalDebuggerForEnCWithRoslyn
             stream.Seek(0, SeekOrigin.Begin);
 
             var metadataModule = ModuleMetadata.CreateFromStream(stream, leaveOpen: true);
-            var reader = SymReaderFactory.CreateReader(pdbStream); 
+            var reader = SymReaderFactory.CreateReader(pdbStream);
             var baseline = EmitBaseline.CreateInitialBaseline(metadataModule, SymReaderFactory.CreateReader(pdbStream).GetEncMethodDebugInfo);
 
             dynamic csharpEditAndContinueAnalyzer = Activator.CreateInstance(_csharpEditAndContinueAnalyzerType, nonPublic: true);
 
             var activespan = Activator.CreateInstance(_activeStatementSpanType, nonPublic: true);
 
+            var bindingFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public;
+            Type[] targetParams = new Type[] { };
+
+            var immutableArray_Create_T = typeof(ImmutableArray).GetMethod("Create", bindingFlags, binder: null, types: targetParams, modifiers: null);
+            var immutableArray_Create_ActiveStatementSpan = immutableArray_Create_T.MakeGenericMethod(_activeStatementSpanType);
+
+            var immutableArray_ActiveStatementSpan = immutableArray_Create_ActiveStatementSpan.Invoke(null, new object[] { });
+
+            //TODO: Generate a document with differences.
             var document = soln.Projects.Single().Documents.Single();
             var token = new CancellationToken();
 
-            //Microsoft.CodeAnalysis.ActiveStatementSpan x;
+            var method = (MethodInfo)csharpEditAndContinueAnalyzer.GetType().GetMethod("AnalyzeDocumentAsync");
+            var myParams = new object[] { soln, immutableArray_ActiveStatementSpan, document, token };
+            dynamic task = method.Invoke(csharpEditAndContinueAnalyzer, myParams);
 
-            //public Task<DocumentAnalysisResults> AnalyzeDocumentAsync(
-            //    Solution baseSolution, 
-            //    ImmutableArray<ActiveStatementSpan> baseActiveStatements, 
-            //    Document document, 
-            //    CancellationToken cancellationToken);
-
-            //dynamic results = csharpEditAndContinueAnalyzer.AnalyzeDocumentAsync(soln, ImmutableArray<ActiveStatementSpan>.Create())
+            var documentAnalysisResults = task.GetType().GetProperty("Result").GetValue(task);
         }
 
         private static Solution createSolution(string text)
