@@ -94,6 +94,7 @@ class C
             object import = module.GetMetaDataInterface(typeof(IMetadataImport).GUID);
             corProcess.Stop(-1);
             module.ApplyChanges(metadataStream.ToArray(), ilStream.ToArray());
+            corProcess.Continue(outOfBand: false);
             
             //Does code change?
         }
