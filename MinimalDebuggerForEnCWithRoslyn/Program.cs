@@ -47,27 +47,25 @@ namespace MinimalDebuggerForEnCWithRoslyn
         private static async Task Go()
         {
             var text = @"
-        class C
-        {
-            public static void Main()
-            {
-                int x = 5;
-                System.Console.WriteLine(5);
-            }
-        }";
+using System;
+using System.Threading.Tasks;
+ 
+class C 
+{ 
+    public Task<int> F() { Console.WriteLine(123); return null; }
+    public static void Main() { Console.WriteLine(1); } 
+}";
 
             var newText = @"
-        class C
-        {
-            public static void Main()
-            {
-                int x = 5 + 10;
-                System.Console.WriteLine(x);
-            }
-        }";
+using System;
+using System.Threading.Tasks;
+ 
+class C 
+{ 
+    public Task<int> F() { Console.WriteLine(123); return null; }
+    public static void Main() { Console.WriteLine(2); }
+}";
             var soln = createSolution(text);
-
-            var options = new CSharpCompilationOptions(OutputKind.ConsoleApplication, moduleName: "MyCompilation");
             var compilation = soln.Projects.Single().GetCompilationAsync().Result;
 
             var stream = new MemoryStream();
@@ -87,7 +85,7 @@ namespace MinimalDebuggerForEnCWithRoslyn
 
             //TODO: Generate a document with differences.
             var document = soln.Projects.Single().Documents.Single();
-            var newDocument = document.WithText(SourceText.From(newText, System.Text.ASCIIEncoding.ASCII));
+            var newDocument = document.WithText(SourceText.From(newText, System.Text.UTF8Encoding.UTF8));
 
             var edits = GetEdits(soln, newDocument);
 
@@ -96,9 +94,11 @@ namespace MinimalDebuggerForEnCWithRoslyn
             var newPdbStream = new MemoryStream();
             var updatedMethods = new List<System.Reflection.Metadata.MethodDefinitionHandle>();
 
-            var newEmitResult = compilation.EmitDifference(baseline, edits, metadataStream, ilStream, newPdbStream, updatedMethods);
+            var newCompilation = newDocument.Project.GetCompilationAsync().Result;
+            var newEmitResult = newCompilation.EmitDifference(baseline, edits, metadataStream, ilStream, newPdbStream, updatedMethods);
 
-            var buf = ilStream.GetBuffer();
+            var metaBug = metadataStream.ToArray();
+            var ilBuf = ilStream.ToArray();
         }
 
         private static Solution createSolution(string text)
@@ -109,7 +109,7 @@ namespace MinimalDebuggerForEnCWithRoslyn
 
             var project = adHockWorkspace.AddProject(ProjectInfo.Create(ProjectId.CreateNewId(), VersionStamp.Default, "MyProject", "MyProject", "C#", metadataReferences: new List<MetadataReference>() { mscorlib } ));
 
-            adHockWorkspace.AddDocument(project.Id, "MyDocument.cs", SourceText.From(text, System.Text.Encoding.ASCII));
+            adHockWorkspace.AddDocument(project.Id, "MyDocument.cs", SourceText.From(text, System.Text.UTF8Encoding.UTF8));
 
             return adHockWorkspace.CurrentSolution;
         }
